@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>カウンターPWA</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#4a90e2">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+    }
+    .card {
+      background: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 280px;
+    }
+    h1 {
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+    #count {
+      font-size: 40px;
+      margin: 16px 0;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>カウンターPWA</h1>
+    <div id="count">0</div>
+    <button id="plus">＋1</button>
+  </div>
+
+  <script>
+    // カウンターの処理
+    const countEl = document.getElementById('count');
+    const plusBtn = document.getElementById('plus');
+
+    let count = Number(localStorage.getItem('count') || 0);
+    countEl.textContent = count;
+
+    plusBtn.addEventListener('click', () => {
+      count++;
+      countEl.textContent = count;
+      localStorage.setItem('count', count);
+    });
+
+    // サービスワーカー登録（PWAに必要）
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(console.error);
+      });
+    }
+  </script>
+</body>
+</html>
